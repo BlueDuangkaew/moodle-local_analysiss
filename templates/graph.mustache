@@ -1,0 +1,264 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_analysiss/analysiss
+
+
+    Example context (json):
+    {
+        'firstname' => $USER->firstname,
+        'lastname' => $USER->lastname,
+        'firstname' => $USER->firstname,
+        'lastname' => $USER->lastname,
+        'ages' => $ages,
+        'gender' => $gender,
+        'education' => $education,
+        'ethnic' => $ethnic,
+    }
+}}
+
+<div class="cardBox">
+    <div class="card">
+        <div>
+            <div class="numbers">0</div>
+            <div class="cardName">Total Student</div>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">0</div>
+            <div class="cardName">Total Teacher</div>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">0</div>
+            <div class="cardName">Available Courses</div>
+        </div>
+    </div>
+</div>
+
+<!-- This is charts section -->
+<div class="graphBox">
+    <div class="box">
+        <h4>Age</h4>
+        <canvas id="ageChart"></canvas>
+    </div>
+    <div class="box">
+        <h4>Gender</h4>
+        <canvas id="genderChart"></canvas>
+    </div>
+</div>
+
+<div class="othergraph-container">
+    <div class="graph-menu">
+        <ul>
+            <li>
+                <span class="title selected" id="edu-btn">Education</span>
+            </li>
+            <li>
+                <span class="title" id="ethnic-btn">Ethnic</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="showGraph">
+        <canvas id="eduChart" class="moreGraph" style="display: block;"></canvas>
+        <canvas id="ethnicChart" class="moreGraph" style="display: none;"></canvas>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Load the data
+    const dataset = [
+        { ages: [{{# ages }}{{.}},{{/ ages }}] }, 
+        { gender: [{{# gender }}"{{.}}",{{/ gender }}] },
+        { education: [{{# education }}"{{.}}",{{/ education }}] },
+        { ethnic: [{{# ethnic }}"{{.}}",{{/ ethnic }}] }
+    ];
+
+    // Count the number of occurrences of each category
+    const counts = {
+        ages: {},
+        gender: {},
+        education: {},
+        ethnic: {}
+    };
+
+    dataset.forEach(data => {
+        for (let key in data) {
+            data[key].forEach(value => {
+                if (counts[key][value]) {
+                    counts[key][value]++;
+                } else {
+                    counts[key][value] = 1;
+                }
+            });
+        }
+    });
+
+    // Extracting counts from the counts object
+    const agesLabels = Object.keys(counts.ages);
+    const agesData = Object.values(counts.ages);
+
+    const genderLabels = Object.keys(counts.gender);
+    const genderData = Object.values(counts.gender);
+
+    const eduLabels = Object.keys(counts.education);
+    const eduData = Object.values(counts.education);
+
+    const ethnicLabels = Object.keys(counts.ethnic);
+    const ethnicData = Object.values(counts.ethnic);
+
+    // Plotting using Chart.js
+    const ctx = document.getElementById('ageChart').getContext('2d');
+    const genderCtx = document.getElementById('genderChart').getContext('2d');
+    const eduCtx = document.getElementById('eduChart').getContext('2d');
+    const ethnicCtx = document.getElementById('ethnicChart').getContext('2d');
+
+    const ageChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: agesLabels,
+            datasets: [{
+                label: 'Number of People',
+                data: agesData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(255, 205, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(201, 203, 207, 0.8)'
+                ],
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Age'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of People'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const genderChart = new Chart(genderCtx, {
+        type: 'bar',
+        data: {
+            labels: genderLabels,
+            datasets: [{
+                label: 'Number of People',
+                data: genderData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(255, 205, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(201, 203, 207, 0.8)'
+                ],
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+        }
+    });
+
+    const eduChart = new Chart(eduCtx, {
+        type: 'pie',
+        data: {
+            labels: eduLabels,
+            datasets: [{
+                label: 'Number of People',
+                data: eduData,
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(74, 190, 190)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    });
+
+    const ethnicChart = new Chart(ethnicCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ethnicLabels,
+            datasets: [{
+                label: 'Number of People',
+                data: ethnicData,
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(74, 190, 190)',
+                'rgb(201, 203, 207)',
+                'rgb(153, 102, 255)',
+                'rgb(255, 159, 64)',
+                'rgb(213, 96, 98)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    });
+
+    document.getElementById('edu-btn').addEventListener('click', function() {
+        // Hide
+        document.getElementById('ethnicChart').style.display = 'none';
+
+        // Display
+        document.getElementById('eduChart').style.display = 'block';
+
+        document.getElementById('edu-btn').classList.add('selected');
+
+        // Remove the class from other elements if needed
+        document.getElementById('ethnic-btn').classList.remove('selected');
+    });
+
+    document.getElementById('ethnic-btn').addEventListener('click', function() {
+        // Hide
+        document.getElementById('eduChart').style.display = 'none';
+
+        // Display
+        document.getElementById('ethnicChart').style.display = 'block';
+
+        document.getElementById('ethnic-btn').classList.add('selected');
+
+        // Remove the class from other elements if needed
+        document.getElementById('edu-btn').classList.remove('selected');
+    });
+
+    console.log("Graph has been plotted.");
+</script>

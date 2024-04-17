@@ -1,0 +1,161 @@
+#page.drawers .main-inner
+{
+    max-width: 95%;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: .5rem;
+    background-color: #fff;
+    padding: 1.5rem .5rem;
+    margin-top: .5rem;
+    margin-bottom: 3rem;
+    flex: 1 0 auto;
+}
+
+.cardBox
+{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 30px;
+}
+.cardBox .card
+{
+    position: relative;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+.cardBox .card .numbers
+{
+    position: relative;
+    font-weight: 500;
+    font-size: 2.5em;
+    color: var(--blue);
+}
+.cardBox .card .cardName
+{
+    color: var(--gray-dark);
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+.graphBox
+{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    min-height: 200px;
+}
+.graphBox .box
+{
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+
+.othergraph-container
+{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: #fff;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.graph-menu
+{
+    width: 200px;
+    height: 100%;
+    background-color: var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.graph-menu ul
+{
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+.graph-menu ul li
+{
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    margin-bottom: 15px;
+}
+.graph-menu ul li:hover
+{
+    background: #fff;
+}
+.graph-menu ul li .title
+{
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    font-weight: bold;
+    color: #fff;
+}
+.graph-menu ul li:hover .title
+{
+    color: var(--blue);
+    cursor: pointer;
+    text-decoration: underline;
+}
+.graph-menu ul li .selected
+{
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    background-color: var(--white);
+    color: var(--blue);
+}
+
+.showGraph
+{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+}
+.showGraph .moreGraph
+{
+    margin: auto;
+    width: 80%;
+}
+
+@media (min-width: 768px)
+{
+    .pagelayout-standard #page.drawers .main-inner, body.limitedwidth #page.drawers .main-inner {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 768px)
+{
+    .graphBox
+    {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+}
